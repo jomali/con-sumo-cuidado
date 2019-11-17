@@ -1,0 +1,115 @@
+
+
+!!==============================================================================
+!!
+!!	CON SUMO CUIDADO
+!!	Tutorial con ayudas al usuario
+!!
+!!==============================================================================
+!!
+!!	Archivo:		consumo_tutorial.inf
+!!	Autor(es):		J. Francisco Martín <jfm.lisaso@gmail.com>
+!!					Ana María Río
+!!	Idioma:			ES (Español)
+!!	Sistema:		Inform-INFSP 6
+!!	Plataforma:		Máquina-Z/Glulx
+!!	Versión:		0.0
+!!	Fecha:			2019/MM/DD
+!!
+!!------------------------------------------------------------------------------
+!!
+!!	Este archivo forma parte de la ficción interactiva
+!!	CON SUMO CUIDADO.
+!!
+!!	CON SUMO CUIDADO es software libre: usted puede
+!!	redistribuirlo y/o modificarlo bajo los términos de la
+!!	Licencia Pública General GNU publicada por la Fundación para
+!!	el Software Libre, ya sea la versión 3 de la Licencia, o (a
+!!	su elección) cualquier versión posterior.
+!!
+!!	CON SUMO CUIDADO se distribuye con la esperanza de que sea
+!!	útil, pero SIN GARANTÍA ALGUNA; ni siquiera la garantía
+!!	implícita MERCANTIL o de APTITUD PARA UN PROPÓSITO
+!!	DETERMINADO. Consulte los detalles de la Licencia Pública
+!!	General GNU para más información.
+!!
+!!	Debería haber recibido una copia de la Licencia Pública
+!!	General GNU junto a CON SUMO CUIDADO. En caso contrario,
+!!	consulte <http://www.gnu.org/licenses/>.
+!!
+!!	Copyright (c) 2019
+!!
+!!------------------------------------------------------------------------------
+
+
+!! @Tutorial
+Object	Tutorial "(Tutorial)"
+ with	hint_buying_a [;
+			if (~~self.hint_buying_a_printed) {
+				self.hint_buying_a_on = true;
+				give self on;
+			}
+		],
+		hint_buying_b [;
+			if (~~self.hint_buying_b_printed) {
+				self.hint_buying_b_on = true;
+				give self on;
+			}
+		],
+		hint_keywords [;
+			if (~~self.hint_keywords_printed) {
+				self.hint_keywords_on = true;
+				give self on;
+			}
+		],
+		!! Las pistas del tutorial se imprimen al mismo tiempo que el inductor
+		!! (ver el objeto 'LibraryMessages' en 'baron_langLM.h'):
+		hints [
+			previous_style;
+			if (self has on) {
+				give self ~on;
+				new_line;
+				previous_style = Utils.set_text_style(TEXT_STYLE_PARSER);
+				print (string) TEXT_STYLE_PARSER_PREFIX;
+				if (self.hint_buying_a_on) self.hint_buying_a_text();
+				if (self.hint_buying_b_on) self.hint_buying_b_text();
+				if (self.hint_keywords_on) self.hint_keywords_text();
+				print (string) TEXT_STYLE_PARSER_SUFIX;
+				Utils.set_text_style(previous_style);
+				new_line;
+				return true;
+			}
+		],
+ private
+		are_hyperlinks_enabled [;
+			if (Utils.get_hyperlinks_status(1)
+				&& Utils.get_hyperlinks_status(2)
+				&& Utils.get_hyperlinks_status(3)
+				&& Utils.get_hyperlinks_status(4)) {
+				return true;
+			} else {
+				return false;
+			}
+		],
+		hint_buying_a_on false,
+		hint_buying_a_printed false,
+		hint_buying_a_text [;
+			self.hint_buying_a_on = false;
+			self.hint_buying_a_printed = true;
+			print "Ayuda: Si quieres comprar un producto en una tienda, primero cógelo con la instrucción ~COGE <OBJETO>~. Cuando salgas de la tienda se comprarán automáticamente todos los productos que hayas cogido.";
+		],
+		hint_buying_b_on false,
+		hint_buying_b_printed false,
+		hint_buying_b_text [;
+			self.hint_buying_b_on = false;
+			self.hint_buying_b_printed = true;
+			print "Ayuda: Mientras permanezcas dentro de la tienda puedes utilizar también ~DEJA <OBJETO>~ para volver a poner ese producto en su sitio. Teclea ~INVENTARIO~ para consultar los objetos que llevas encima.";
+		],
+		hint_keywords_on false,
+		hint_keywords_printed false,
+		hint_keywords_text [;
+			self.hint_keywords_on = false;
+			self.hint_keywords_printed = true;
+			print "Ayuda: Para avanzar en la historia tienes que interactuar con los objetos interactivos presentes en el escenario (por ejemplo, haciendo ~clic~ con el ratón sobre el nombre de ese objeto). Para destacar qué objetos interactivos hay presentes en un momento dado, mantén pulsada la tecla SHIFT izquierda.";
+		],
+;

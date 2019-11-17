@@ -1,0 +1,1164 @@
+
+
+
+
+
+Room	MasAlla "(Almacén lógico)"
+ has	male,
+ with	gender G_MASCULINO,
+				description [;
+			return true;
+		],
+;
+
+Character	Ente "protagonista" MasAlla
+ has	male proper,
+ with	name_m 'personaje' 'protagonista',
+		gender G_MASCULINO,
+				description [;
+			<<Inv>>;
+		],
+		end [ code
+			done;
+			if (code == 1) {
+								if (self.check_complete_outfit()) {
+					print "Aunque aún me queda algo de dinero, pongo fin a la misión. ¡Después de todo he conseguido hacerme con un conjunto completo! Ahora espero poder empezar a socializar por fin y comprender este entorno.";
+					new_line;
+				} else {
+					print "Aunque aún no he conseguido hacerme con un conjunto completo, decido poner fin a la misión por hoy. Creo que es un buen primer paso para empezar a socializar y comprender este entorno.";
+					new_line;
+				}
+			} else {
+								if (self.check_complete_outfit()) {
+					print "Bien, ya no me queda dinero para comprar más y he conseguido un conjunto completo con el que espero poder empezar a socializar y comprender este entorno.";
+					new_line;
+				} else {
+					print "Vaya, ya no me queda dinero para comprar más y no he conseguido un conjunto completo con el que empezar a socializar y comprender este entorno.";
+					new_line;
+				}
+			}
+			new_line;
+			print "Salir de mi estación ha sido una experiencia interesante, pero también un reto con cierta incertidumbre y algo de estrés. La diversidad de ambientes, la cantidad de gente, el frío, pero sobre todo, el tomar decisiones. Primero pensar si salir de este espacio que ya llamo hogar o atrincherarme y rechazar la idea de compartir, interactuar, comprender, esforzarme por formar parte de una comunidad… Y esta fue la decisión sencilla, tan solo por la imposibilidad de recluirme sin morir en el intento. Lo difícil empezó a partir de ahí, pero será mejor intentar ser objetivos y analizar las decisiones que he ido tomando. Creo que así liberaré un poco esta ansiedad que me ha generado el ritmo frenético con el que parece estar condenado a moverse el mundo.";
+			new_line;
+						new_line;
+			new_line;
+			Utils.print_horizontal_rule();
+			new_line;
+			new_line;
+			print "Para decidir si ir al Centro Comercial o a la ciudad, tal vez tendría que haber tenido en cuenta diferentes variables; las condiciones climáticas, la distancia a recorrer, las posibilidades de interacción que supondría… Sin embargo, reflexiono ahora sobre ello y me doy cuenta de que esas variables son un tanto egocéntricas. He pensado en no mojarme, en no pasar frío unos minutos o en caminar menos, pero no en el consumo energético que implica un modelo de consumo u otro, en las condiciones laborales de la plantilla de las tiendas de cada sitio o el tipo de producto y consumo que promueven.";
+			new_line;
+									if (CentroComercial has visited && Franquicia has visited) {
+				new_line;
+				print "Curiosamente, las franquicias en las que he estado tenían una certificación que hace referencia a la sostenibilidad del establecimiento. Es el sello ";
+				Utils.website_hyperlink("https://new.usgbc.org",
+					"LEED del US Green Building Council");
+				print ". Digo “curiosamente” porque, aunque la mayoría de certificaciones de este tipo se basan en estudios sobre el consumo de luz, la optimización de los espacios o la energía necesaria para su correcta climatización, la verdad es que implican un coste que el pequeño comercio no podría asumir, así que al final son certificaciones sesgadas. Creo que un buen ejercicio es desconfiar de todas las certificaciones. Esa sospecha es cada vez más común; asociaciones supuestamente formadas por profesionales de la salud que recomiendan productos cargados de grasas saturadas y azúcares, empresas multinacionales, eléctricas, petroletas, textiles, o cadenas de comida rápida que se suman a proyectos sostenibles y de bienestar por la imagen positiva que conlleva y no por compromiso. Es un sistema perverso del que hay que ser conscientes, aunque sea difícil escapar de él.";
+				new_line;
+			}
+			if (Calle has visited
+				&& (PequennoComercio has visited || SegundaMano has visited)) {
+				new_line;
+				print "Sin duda, decidir ir al centro de la ciudad suele tener varias desventajas o incomodidades, especialmente si llueve o hace frío, y las franquicias están también presentes en ese ambiente. Sin embargo, apoyar a las tiendas del barrio o de segunda mano puede reducir el impacto medioambiental de otros estilos de consumo. La energía para mantener la luz y climatización adecuada suele ser menor, aunque es cierto que no suelen tener certificaciones al respecto porque muchas de ellas implican un coste elevado que los autónomos o pequeñas empresas no pueden permitirse.";
+				new_line;
+			}
+			new_line;
+			print "En cada una de las tiendas, he podido observar personas encargadas del buen funcionamiento del establecimiento y de la atención a los clientes, pero no he pensado en su bienestar, ni sus condiciones laborales, en las horas que están de pie o si trabajan los domingos. Tampoco he caído en las personas que hay detrás, las invisibles, los intermediarios...";
+			new_line;
+			if (Franquicia has visited) {
+				new_line;
+				print "Tengo claro que, como yo, cada producto viene de algún lugar. A mí, por momentos, me parece un esfuerzo ingente desplazarme y, si pienso en lo que supone desplazar un producto, me doy cuenta de que conlleva un proceso complejo. Cada producto se transporta en determinados vehículos, que, a su vez, necesitan de una energía para ponerse en marcha. La mayoría utilizan combustible que es extraído de fuentes no sostenibles (sin pensar en cómo o dónde). Y en ocasiones, aunque sea combustible biodiesel, implica cultivos masivos de soja y palma que han sustituido cultivos tradicionales y ha favorecido la deforestación. Al final, todo genera un impacto en el medio ambiente que repercute en el bienestar de la vida del planeta.";
+				new_line;
+			}
+			new_line;
+			print "La misión no era tan simple después de todo.";
+			new_line;
+			new_line;
+			new_line;
+			print (parser) "Pulsa 'R' para volver a empezar la historia.";
+			new_line;
+			while (~~done) {
+				if (Utils.press_any_key() == 'R' or 'r') {
+					done = true;
+					@restart;
+				}
+			}
+			return true;
+		],
+		first_buy true,
+		reset [;
+			self.first_buy = true;
+			return true;
+		],
+ private
+		check_complete_outfit [
+			dress obj pants result shirt shoes;
+			objectloop(obj ofclass Goods && obj has general) {
+				if (obj == FranquiciaBotas
+					|| obj == PequennoComercioBotas
+					|| obj == SegundaManoBotas) {
+					shoes = true;
+				}
+				if (obj == FranquiciaPantalones
+					|| obj == PequennoComercioPantalones
+					|| obj == SegundaManoPantalones) {
+					pants = true;
+				}
+				if (obj == FranquiciaCamisetas
+					|| obj == PequennoComercioCamisetas
+					|| obj == SegundaManoCamisetas) {
+					shirt = true;
+				}
+				if (obj == FranquiciaVestidos
+					|| obj == PequennoComercioVestidos
+					|| obj == SegundaManoVestidos) {
+					dress = true;
+				}
+			}
+			if ((shoes && pants && shirt)
+				|| (shoes && dress)) {
+				result = true;
+			}
+			return result;
+		],
+;
+
+Item	Cartera "cartera" Ente
+ has	female,
+ with	name_f 'cartera',
+		name_m 'dinero',
+		gender G_FEMENINO,
+				before [;
+			Drop:
+				print "No puedo ir dejándomela por ahí.";
+				new_line;
+				return true;
+		],
+		description [
+			verbose;
+			verbose = true;
+			if (self.money == 0) {
+				print "No me queda dinero ya.";
+			} else if (self.money == 1) {
+				print "Sólo me queda 1 céntimo en ", (the) self, ".";
+			} else if (self.money < 100) {
+				print "Sólo me quedan ", self.money, " céntimos en ", (the) self, ".";
+			} else if (self.money < 1000) {
+				print "En ", (the) self, " me quedan apenas ";
+				Utils.print_money(self.money, verbose);
+				print ".";
+			} else {
+				print "Tengo ";
+				Utils.print_money(self.money, verbose);
+				print " en ", (the) self, ".";
+			}
+			new_line;
+			return true;
+		],
+		get_debt [;
+			return self.debt;
+		],
+		get_money [;
+			return self.money;
+		],
+		modify_debt [ amount pay
+			result;
+			if ((self.debt + amount) > self.money) {
+								result = false;
+			} else {
+								self.debt = self.debt + amount;
+				result = true;
+			}
+			if (pay && result) {
+				self.pay_debt();
+			}
+			return result;
+		],
+		pay_debt [
+			temp obj result;
+			result = true;
+			self.money = self.money - self.debt;
+			self.debt = 0;
+									objectloop(obj ofclass Goods && obj hasnt general) {
+								temp = obj.get_price();
+				break;
+			}
+			objectloop(obj ofclass Goods && obj hasnt general) {
+												if (obj.get_price() < temp) {
+					temp = obj.get_price();
+				}
+			}
+			if (self.money < temp) {
+												result = false;
+			}
+			return result;
+		],
+		reset [;
+			self.debt = 0;
+			self.money = 0;
+			self.modify_debt(-INITIAL_BUDGET, true);
+			return true;
+		],
+ private
+		debt 0,
+		money 0,
+;
+
+Item	Compra MasAlla
+ has	female remarkable,
+ with	short_name [;
+			print "";
+PRT__("bolsa", "bolsa", REMARKABLE_OBJECT);
+print " con tus compras";
+			return true;
+		],
+		name_f 'bolsa' 'compra' 'ropa',
+		name_fp 'compras',
+		gender G_FEMENINO,
+				before [;
+			Drop:
+				print "No me he decidido salir hoy a la calle para dejar mis compras por ahí tiradas.";
+				new_line;
+				return true;
+		],
+		description [;
+						print "Una ";
+PRT__(self, "bolsa");
+print " con toda la compra que voy haciendo.";
+			new_line;
+			return true;
+		],
+;
+
+Atrezzo	Gente "gente"
+ has	female,
+ with	found_in Calle CentroComercial Franquicia,
+		name_f 'persona',
+		name_fp 'personas',
+		name_m 'gente',
+		gender G_FEMENINO,
+				before [;
+			TalkTo:
+				if (real_location == CentroComercial) {
+					<<Examine self>>;
+				}
+		],
+		description [;
+			switch (real_location) {
+				Calle:
+					print "Una multitud va y viene, concentrados en sus propios quehaceres.";
+					new_line;
+					return true;
+				CentroComercial:
+					if (self.described_mall) {
+						print "Debería hacerme mirar esta tendencia suicida y procrastinadora. Con una mala experiencia al día en esto de socializar, suficiente. No he de perder de vista mi objetivo: intentar conseguir al menos un conjunto con el que vestirme.";
+					} else {
+						self.described_mall = true;
+						Cartera.modify_debt(-100, true);
+						print "He tratado de parar a un par de personas para preguntarles por alguna recomendación. Pensé que podría ser una buena excusa para socializar y es algo a lo que dan bastante importancia. No ha salido bien, nada bien. Una señora me ha hecho un quiebro mientras movía el brazo negando y maldecía farfullaba alguna maldición. Y un joven que estaba tomando un café me ha mirado de arriba abajo, me ha dado una moneda y me ha golpeado suavemente en el hombro.";
+					}
+				Franquicia:
+					if (self.described_shop_a) {
+						print "Es hipnótico observales deambular, pero esta quietud empieza a poner en alerta al personal de uniforme que pasea de un extremo a otro de la tienda, así que será mejor hacer algo.";
+					} else {
+						self.described_shop_a = true;
+						print "Hay una gran multitud haciendo un montón de ruido mientras revuelve entre los montones de ropa como en trance. Dejan todo donde cae, sin preocuparse de doblarlo y apenas de dejarlo en un lugar cercano al de su origen. Me pregunto si es una costumbre extendida y si tendré que hacer lo mismo. Tras ellos, algunas personas con uniformes de la tienda y una etiqueta con su nombre ordenan aquel caos como pueden mientras sonríen a ratos y responden consultas de otros clientes. Los que ya han terminado de revolver hacen cola para pagar, mirando de reojo lo que ha comprado la gente de su alrededor, seguro que preguntándose si habrán acertado o si se lo pondrán más de una o dos veces.";
+					}
+			}
+			new_line;
+			return true;
+		],
+		reset [;
+			self.described_mall = false;
+			self.described_shop_a = false;
+			return true;
+		],
+ private
+		described_mall false,
+		described_shop_a false,
+;
+
+
+
+AdjacentRoom	DirEstacion "estación"
+ has	female,
+ with	found_in Calle CentroComercial,
+		name_f 'casa' 'estacion',
+		gender G_FEMENINO,
+				adjacent_room Estacion,
+		before [;
+			Enter:
+				self.AdjacentRoom::before();
+				return true;
+		],
+		description [;
+			print "", (The) self, ". Mi centro de operaciones.";
+			new_line;
+			return true;
+		],
+;
+
+Room	Estacion "En algún lugar..."
+ has	male,
+ with	name_f 'estacion',
+		name_m 'lugar',
+		gender G_MASCULINO,
+		adjectives 'algun' 'alguna',
+				description [
+			temp verbose;
+			verbose = true;
+			if (self hasnt visited) {
+				print "He de tener en cuenta que utilizan un sistema de intercambio basado en lo que llaman billetes y monedas, o dinero (por cierto, para conseguirlo hacen casi de todo, es verdaderamente interesante) y no salen de casa sin llevarlo en una especie de bolsillo portátil que denominan ", (name) Cartera, ". Me he hecho con una y, sumando todo lo que tengo en ella, mi presupuesto es de unos ";
+				Utils.print_money(Cartera.get_money(), verbose);
+				print " y, ahora mismo, mi aspecto es algo andrajoso. Me veo bien, pero no parece adecuarse al entorno social, así que será mejor conseguir al menos un conjunto completo.
+				^^
+				La pregunta es, ¿por dónde empiezo? En esta ciudad no hay muchas opciones: ", (the) DirCentroComercial, " o alguna tienda ", (del) DirCiudad, "…";
+			} else {
+				temp = Cartera.get_money();
+				if (temp == 0) {
+										print "No me queda dinero ya.";
+				} else if (temp == 1) {
+					print "Sólo me queda 1 céntimo";
+				} else if (temp < 100) {
+					print "Sólo me quedan ", temp, " céntimos";
+				} else if (temp < 1000) {
+					print "Me quedan apenas ";
+					Utils.print_money(temp, verbose);
+				} else {
+					print "Aún tengo ";
+					Utils.print_money(temp, verbose);
+				}
+				print " del dinero que he apartado para comprar ropa. Aunque en esta ciudad no hay muchas opciones: ", (the) DirCentroComercial, " o alguna tienda ", (del) DirCiudad, "…";
+			}
+			new_line;
+			Tutorial.hint_keywords();
+			return true;
+		],
+		initial [;
+			if (self hasnt visited) {
+				print "Trato de recordar en qué momento llegué aquí. Trazo líneas en mi diario de campo por si eso activase mi memoria kinestésica y lograse dibujar un mapa o una ruta hacia el último espacio que llamé hogar.
+				^^
+				Sé que no encajo ni pertenezco a este lugar. Aquí todo el mundo parece tener una forma definida, diversa, pero nimiedades si las comparo conmigo, un ser etéreo, sin pies ni cabeza, o ubicados de una forma poco normativa, o de tendencia creativa. Desconozco este sistema, su cultura, su historia, pero si quiero sobrevivir, tendré que mimetizarme.
+				^^
+				Creo que tengo que encontrarme, desarrollar mi identidad, construir mi personalidad. Por lo visto, esa etapa es algo difícil, así que me da un poco de vértigo, pero he de comenzar en ese punto. Parece que el sitio idóneo para ello es el instituto. Con frecuencia, pasada esa etapa, el cerebro humano se solidifica, aunque también es cierto que la crueldad y la intolerancia a la otredad parecen inherentes a esta especie en cualquier etapa, así que será mejor no llamar demasiado la atención.";
+				new_line;
+																				new_line;
+				print "Una buena idea es recurrir a la practicidad y empezar por llevar ropa encima, eso de ser un ente informe desconcierta a la gente por ahora...";
+				new_line;
+				new_line;
+				new_line;
+			}
+		],
+;
+
+
+
+AdjacentRoom	DirCentroComercial "centro comercial"
+ has	male,
+ with	found_in [;
+			if (real_location == Estacion) {
+				return true;
+			}
+			if (real_location == Franquicia
+				&& Franquicia.in_the_mall) {
+				return true;
+			}
+		],
+		name_m 'centro' 'comercial',
+		gender G_MASCULINO,
+				adjacent_room CentroComercial,
+		before [;
+			Enter:
+				self.AdjacentRoom::before();
+				return true;
+		],
+		description [;
+			print "", (A) self, " de las afueras.";
+			new_line;
+			return true;
+		],
+;
+
+Room	CentroComercial "El centro comercial"
+ has	male,
+ with	name_m 'centro' 'comercial',
+		gender G_MASCULINO,
+				description [;
+			if (self hasnt visited) {
+				print "Al entrar, he notado un claro cambio de temperatura, un ambiente seco y artificial te envuelve con una música de fondo demasiado aséptica y que nadie parece percibir. La luz brillante te hace olvidar la hora, podrían ser las once de la mañana o de la noche y aquello tendría la misma iluminación. Además de la música, se oye el jaleo de una gran muchedumbre embotada en sus propias vidas. Las miradas de ", (the) Gente, " normalmente me hacen sentir cierta incomodidad pero aquí, sin embargo, todos parecen ignorarse unos a otros.";
+												print " Hay una ", (name) DirFranquicia, " al que la gente no deja de entrar y salir y que parece el sitio ideal para empezar mi búsqueda";
+				print " y, si empezase a agobiarme, siempre puedo regresar ", (al) DirEstacion, ".";
+			} else {
+												print "El ambiente sigue cargado y la gente deambula acelerada y sin rumbo, será mejor entrar en ", (the) DirFranquicia, " que parece tener tanto éxito y terminar cuanto antes. Aunque si empezase a agobiarme, siempre puedo regresar ", (al) DirEstacion, ".";
+			}
+			new_line;
+			return true;
+		],
+;
+
+
+
+AdjacentRoom	DirCiudad "ciudad"
+ has	female,
+ with	found_in [;
+			if (real_location == Estacion
+				|| real_location == PequennoComercio
+				|| real_location == SegundaMano) {
+				return true;
+			}
+			if (real_location == Franquicia
+				&& ~~Franquicia.in_the_mall) {
+				return true;
+			}
+		],
+		name_f 'calle' 'ciudad',
+		name_fp 'calles',
+		gender G_FEMENINO,
+				adjacent_room Calle,
+		before [;
+			Enter:
+				self.AdjacentRoom::before();
+				return true;
+		],
+		description [;
+			print "Una de las calles, en el centro de ", (the) self, ". Donde pueden encontrarse varios comercios.";
+			new_line;
+			return true;
+		],
+;
+
+Room	Calle "En la calle"
+ has	male,
+ with	name_f 'calle' 'ciudad',
+		gender G_FEMENINO,
+				description [;
+			if (self hasnt visited) {
+				print "Llueve. Las luces de los coches, los escaparates y los carteles publicitarios se reflejan en el agua estancada en cunetas y adoquines mal encajados. Apenas es posible avanzar diez metros sin pasar sobre un charco o sin que te caiga una gotera. El ruido de los vehículos genera un zumbido constante y su continuo transitar impide pasear con libertad por la ciudad. A pesar de todo, es";
+			} else {
+				print "Es";
+			}
+			print " interesante la miscelánea de ambientes, los olores que salen de algunas panaderías y trenes que venden castañas se mezclan con el olor a lluvia sobre asfalto y a alcantarilla. No sé, siempre puedo regresar ", (al) DirEstacion, ", aunque también puedo probar suerte la tienda de ", (name) DirFranquicia, " que se ve algo más adelante, algún ", (name) DirPequennoComercio, " o ", (a) DirSegundaMano, " que conozco y sé que está cerca.";
+			new_line;
+			return true;
+		],
+;
+
+
+
+AdjacentRoom	DirFranquicia "franquicia"
+ has	female,
+ with	found_in Calle CentroComercial,
+		name_f 'franquicia' 'tienda',
+		gender G_FEMENINO,
+				adjacent_room Franquicia,
+		before [;
+			Enter:
+				if (real_location == CentroComercial) {
+					Franquicia.in_the_mall = true;
+				}
+				if (real_location == Calle) {
+					Franquicia.in_the_mall = false;
+				}
+				self.AdjacentRoom::before();
+				return true;
+		],
+		description [;
+			print "Una de las muchas tiendas de una famosa ", (name) self, ".";
+			new_line;
+			return true;
+		],
+;
+
+Shop	Franquicia "Franquicia"
+ has	male,
+ with	name_f 'fanquicia' 'tienda',
+		gender G_MASCULINO,
+				description [;
+			print "Unos cacharros electrónicos franquean el umbral entre la tienda y";
+			if (self.in_the_mall) {
+				print " ", (the) DirCentroComercial, "";
+			} else {
+				print " el resto ", (del) DirCiudad, "";
+			}
+			if (self hasnt visited) {
+ 				print ". Suena música de fiesta y la luz es algo más tenue, como en una discoteca, pero sin duda se trata de una tienda de ropa. ", (The) FranquiciaCamisetas, ", ", (the) FranquiciaPantalones, " y ", (the) FranquiciaBotas, " se acumulan en las estanterías. Abrigos y vestidos cuelgan de las perchas y los canónicos maniquíes parecen luchar por mantenerse en pie. Una gran fila de ", (name) Gente, " hace cola para pagar por sus elecciones y otra fila, más reducida, espera para utilizar los probadores.";
+			} else {
+				print ". Sigue manteniéndose esa música discotequera y la luz tenue. No parece que haya cambiado nada: el ruido, la cantidad de gente, la colas, ", (the) FranquiciaCamisetas, ", ", (the) FranquiciaPantalones, ", ", (the) FranquiciaVestidos, ", ", (the) FranquiciaBotas, " y ", (the) FranquiciaAbrigos, ". Todo igual.";
+			}
+			new_line;
+			return true;
+		],
+		in_the_mall false,
+		out_to [;
+			if (self.in_the_mall) {
+				<<Enter DirCentroComercial>>;
+			} else {
+				<<Enter DirCiudad>>;
+			}
+		],
+;
+
+Goods	-> FranquiciaAbrigos "abrigos"
+ has	male pluralname,
+ with	name_f 'prenda' 'ropa',
+		name_fp 'prendas',
+		name_m 'abrigo',
+		name_mp 'abrigos',
+		gender	G_MASCULINO + G_PLURAL,
+				description [;
+			print "Cubre todo el cuerpo, del cuello a las rodillas. Se abrocha con botones y tienen diferentes colores. El tejido es muy grueso, así que resultan una buena opción para los días de frío. Cada abrigo tiene varias etiquetas con información que la mayoría de gente no consulta, pero echaré un vistazo.
+			^^
+			En la primera aparece la composición: 77% lana, 22% poliamida, 1% otras fibras. En otra varios iconos sobre cómo tratarlo para que quede limpio. En una tercera etiqueta hay una bobina dibujada y aparece escrito ", (emph) "~Care for fiber, 50% hilo reciclado~", ". Otra tiene varias líneas negras y paralelas con una numeración debajo y las letras ", (emph) "~Made in China~", ". La última, en fin, especifica el coste del abrigo: ";
+			Utils.print_money(self.price);
+			print ".";
+			new_line;
+			return true;
+		],
+		messages [ n;
+			switch (n) {
+				0:
+					print "un ";
+PRT__(self, "abrigo");
+print "";
+					return true;
+				1:
+					print "Ya tengo uno de estos.";
+				2:
+					print "Ya he cogido uno.";
+				3:
+					print "Cojo un ";
+PRT__(self, "abrigo");
+print ".";
+				4:
+					print "Dejo de nuevo el ";
+PRT__(self, "abrigo");
+print ".";
+			}
+			new_line;
+			return true;
+		],
+ private
+		price 9995, ! 6995, 2000 - 14890
+;
+
+Goods	-> FranquiciaBotas "botas"
+ has	female pluralname,
+ with	name_f 'bota' 'prenda' 'ropa',
+		name_fp 'botas' 'prendas',
+		gender G_FEMENINO + G_PLURAL,
+		adjectives 'marrones' 'negra' 'negras',
+				description [;
+			print "Unas botas que a la gente les llegan a los tobillos parecen estar muy extendidas en su uso, tal vez por la época, aunque dicen que antes había cuatro etapas climáticas diferenciadas. Las hay de color negro o marrón, pero todas se atan con unos cordones y al parecer están hechas de un tejido similar al que recubre los cuerpos. La etiqueta dice que están hechos de piel. No especifica de dónde han sacado la piel, así que he preguntado y me han dicho que de vacuno, aunque he leído Bangladés. No comprendo muy bien qué proceso implica, pero me cuesta imaginarlo (y no sé si quiero). Hay varias instrucciones de cuidado y mantenimiento adecuado y, en la parte inferior, el precio, que es de ";
+			Utils.print_money(self.price);
+			print ".";
+			new_line;
+			return true;
+		],
+		messages [ n;
+			switch (n) {
+				0:
+					print "", (a) self, "";
+					return true;
+				1:
+					print "Ya he comprado unas ", (name) self, " iguales.";
+				2:
+					print "Ya he cogido unas.";
+				3:
+					print "Cojo unas ";
+PRT__(self, "botas");
+print ".";
+				4:
+					print "Dejo de nuevo las ";
+PRT__(self, "botas");
+print ".";
+			}
+			new_line;
+			return true;
+		],
+ private
+		price 7995, ! 5995, 1400 - 6895
+;
+
+Goods	-> FranquiciaCamisetas "camisetas"
+ has	female pluralname,
+ with	name_f 'camiseta' 'prenda' 'ropa',
+		name_fp 'camisetas' 'prendas',
+		gender G_FEMENINO + G_PLURAL,
+				description [;
+			print "En varios colores. Algunas tienen el cuello en pico y otras redondo, manga corta o larga, pero pocas diferencias significativas. Una de las etiquetas está cosida a un lado y otra es una cartulina marrón enganchada con un imperdible. La primera, en realidad, son unas siete etiquetas similares con la misma información en diferentes idiomas y señalan que están hechas de un 70% algodón y 30% poliéster. Además, aparecen algunos símbolos un tanto extraños. El primero es un triángulo que indica el tipo de planchado. A su lado, un cubo con una cifra que, al parecer, indica la temperatura a la que debe estar el agua con la que ha de ser lavado. En la otra etiqueta únicamente veo un logo a todo color que dice ", (emph) "~Better Cotton Initiative~", ". Cada camiseta, con toda esa literatura, marca un precio de ";
+			Utils.print_money(self.price);
+			print " y está fabricada en Camboya.";
+			new_line;
+			return true;
+		],
+		messages [ n;
+			switch (n) {
+				0:
+					print "una ";
+PRT__(self, "camiseta");
+print "";
+					return true;
+				1:
+					print "Ya he comprado una de estas ", (name) self, ".";
+				2:
+					print "Ya he cogido una.";
+				3:
+					print "Cojo una de ", (the) self, ".";
+				4:
+					print "Dejo la ";
+PRT__(self, "camiseta");
+print " de nuevo en la estantería.";
+			}
+			new_line;
+			return true;
+		],
+ private
+		price 1995, ! 1495, 300 - 2490
+;
+
+Goods	-> FranquiciaPantalones "pantalones"
+ has	male pluralname,
+ with	name_f 'prenda' 'ropa',
+		name_fp 'prendas',
+		name_m 'pantalon',
+		name_mp 'pantalones',
+		gender G_MASCULINO + G_PLURAL,
+				description [;
+			print "Me llaman la atención unos pantalones azulados. Al menos una tercera parte de la gente a la que me he cruzado hoy llevaban puestos unos pantalones iguales. Quizá la etiqueta diga si son parte de algún tipo de uniforme que no conozco. En las primeras líneas puede leerse: ", (emph) "~76% algodón, 23% poliéster y 1% licra~", " y ", (emph) "~Made in Vietnam~", ". Debajo aparecen instrucciones de lavado y planchado que no comprendo bien, transmiten el mensaje en un código lleno de triángulos, círculos tachados, puntos, rayas... En un trozo de cartulina a la altura de la cintura veo un logo a todo color que dice ", (emph) "~Better Cotton Initiative~", ". En otro papel aparece el precio: ";
+			Utils.print_money(self.price);
+			print ".";
+			new_line;
+			return true;
+		],
+		messages [ n;
+			switch (n) {
+				0:
+					print "", (a) self, "";
+					return true;
+				1:
+					print "Ya he comprado unos ";
+PRT__(self, "pantalones");
+print " iguales.";
+				2:
+					print "Ya he cogido unos.";
+				3:
+					print "Cojo unos ";
+PRT__(self, "pantalones");
+print ".";
+				4:
+					print "Dejo los ";
+PRT__(self, "pantalones");
+print " en su sitio.";
+			}
+			new_line;
+			return true;
+		],
+ private
+		price 2595, ! 2995, 8500 - 7990
+;
+
+Goods	-> FranquiciaVestidos "vestidos"
+ has	male pluralname,
+ with	name_f 'prenda' 'ropa' 'vestido',
+		name_fp 'prendas' 'vestidos',
+		gender G_MASCULINO + G_PLURAL,
+				description [;
+			print "Hay muchos modelos; más cortos, largos, con un corte más entallado o con vuelo, pero todos parecen igual de adecuados para mi objetivo. Será mejor consultar la etiqueta de uno de ellos para ver si hay algo destacable...
+			^^
+			Este puede ser una opción interesante, tienen varios colores, botones al frente, y un estampado que es discreto, pero moderno. Según la etiqueta, está hecho en Taiwán a base de poliéster (79%), acrílico (20%) y fibra metalizada (1%), hay que lavarlo a 30º y cuesta ";
+			Utils.print_money(self.price);
+			print ".";
+			new_line;
+			return true;
+		],
+   		messages [ n;
+   			switch (n) {
+   				0:
+   					print "un ";
+PRT__(self, "vestido");
+print "";
+					return true;
+   				1:
+   					print "Ya he comprado uno igual.";
+   				2:
+   					print "Ya he cogido uno.";
+   				3:
+   					print "Cojo un ";
+PRT__(self, "vestido");
+print ".";
+   				4:
+   					print "Dejo el ";
+PRT__(self, "vestido");
+print ".";
+   			}
+   			new_line;
+   			return true;
+   		],
+ private
+		price 4995, ! 3890, 1200 - 7890
+;
+
+
+
+AdjacentRoom	DirPequennoComercio
+ has	male,
+ with	short_name [;
+			print "pequeño ";
+PRT__("comercio", "comercio", DIRECTION_OBJECT);
+print "";
+			return true;
+		],
+		found_in Calle,
+		name_f 'tienda',
+		name_m 'comercio',
+		gender G_FEMENINO,
+		adjectives 'pequena' 'pequeno',
+				adjacent_room PequennoComercio,
+		before [;
+			Enter:
+				self.AdjacentRoom::before();
+				return true;
+		],
+		description [;
+			print "", (A) self, ".";
+			new_line;
+			return true;
+		],
+;
+
+Shop	PequennoComercio "Pequeño comercio"
+ has	male,
+ with	name_f 'tienda',
+		name_m 'comercio' 'local',
+		gender G_MASCULINO,
+		adjectives 'pequeno',
+				description [;
+			if (self hasnt visited) {
+				print "Al entrar hay un felpudo bastante grande con un creativo dibujo que da la bienvenida y se despide dependiendo de la dirección en la que lo veas. He caminado en círculos un par de veces para confirmarlo y me ha parecido divertido, aunque creo haber incomodado a un par de personas que trataban de salir de la tienda.";
+				new_line;
+				new_line;
+			}
+			print "La luz es cálida y la temperatura agradable. En el centro hay un par de muebles de madera con varias ", (name) PequennoComercioCamisetas, " dobladas y algunas ", (name) PequennoComercioBotas, " colocadas entre adornos decorativos naturales (hojas secas, ramas y unas bolas marrones a las que llaman piñas). En los laterales hay unas varillas atiborradas de perchas con ", (name) PequennoComercioVestidos, " y ", (name) PequennoComercioPantalones, ". Todo está ordenado según la gama cromática, lo cual, por alguna razón, me relaja y me hace sonreír. El sonido de una campanilla avisa cada vez que entra alguien de la ";
+PRT__(DirCiudad, "calle");
+print " y a cada timbre le sigue un saludo del personal de la tienda.";
+			if (self hasnt visited) {
+				new_line;
+				new_line;
+				print "La dependienta se acerca hacia mí al verme entrar:
+				^^
+				— Hola. Si puedo ayudarte con alguna cosa, me avisas, ¿de acuerdo? —y, sin haber sabido responder más que un gesto de desconcierto, se gira y sigue doblando camisetas.";
+			}
+			new_line;
+			return true;
+		],
+		out_to [;
+			<<Enter DirCiudad>>;
+		],
+;
+
+Goods	-> PequennoComercioBotas "botas"
+ has	female pluralname,
+ with	name_f 'bota' 'prenda' 'ropa',
+		name_fp 'botas' 'prendas',
+		gender G_FEMENINO + G_PLURAL,
+				description [;
+			print "Parece que tienen un estilo atemporal, sencillo y pensado para que encaje en la moda de cualquier época mientras duren. Tienen varios colores, todos ellos con la suela marrón y de cierre con un sistema de cuerdas. Tienen una pequeña tarjeta colgada de uno de los cordones que detalla que toda su producción está situada en talleres locales y familiares de la región. No usan ningún tipo de piel procedente de animales, así que son 100% libres de crueldad animal garantizado por ", (emph) "PeTA", ". Utilizan tejidos de origen vegetal como lino, cáñamo, corcho y, sobre todo, algodón con certificación GOTS y las suelas están hechas de yute, caucho natural, corcho y TPU ecológico. Qué cantidad de información… En esa misma tarjeta marca el precio (";
+			Utils.print_money(self.price);
+			print ").";
+			new_line;
+			return true;
+		],
+		messages [ n;
+			switch (n) {
+				1:
+					print "Ya he comprado unas ", (name) self, " iguales.";
+					return true;
+				2:
+					print "Ya he cogido unas.";
+				3:
+					print "Cojo unas ";
+PRT__(self, "botas");
+print ".";
+				4:
+					print "Dejo de nuevo las ";
+PRT__(self, "botas");
+print ".";
+			}
+			new_line;
+			return true;
+		],
+ private
+		price 6400, ! 5995, 1400 - 6895
+;
+
+Goods	-> PequennoComercioCamisetas "camisetas"
+ has	female pluralname,
+ with	name_f 'camiseta' 'prenda' 'ropa',
+		name_fp 'camisetas' 'prendas',
+		gender G_FEMENINO + G_PLURAL,
+				description [;
+			print "La mayoría de las camisetas tienen un estilo parecido, casi todas de un único color, aunque veo un par que tienen algún estampado. No tienen etiquetas cosidas a los lados, pero sí un hoja un poco rara enlazada con un trozo de cuerda. Indican instrucciones de lavado, material (100% algodón sostenible), una breve historia sobre la gente de la fábrica gallega en la que se ha elaborado y un agradecimiento. En el margen inferior derecho hay un pequeño dibujo del contorno de unos árboles y las letras ", (emph) "~sheedo~", ".";
+			if (self hasnt described
+				|| PequennoComercioVestidos hasnt described) {
+				new_line;
+				new_line;
+				print "—Es una empresa que elabora el papel con semillas. Lo puedes plantar, ¿ves? Esta hoja tiene semillas de zanahoria.
+				^^
+				Qué curioso, compras una ";
+PRT__(self, "camiseta");
+print " y puedes llevarte una zanahoria, o una calabaza, o unos tomates… Igual por eso el precio es algo elevado, ";
+				Utils.print_money(self.price);
+				print ".";
+			} else {
+				print " El precio es algo elevado: ";
+				Utils.print_money(self.price);
+				print ", aunque te llevas a casa también alguna verdura además de la ";
+PRT__(self, "camiseta");
+print ".";
+			}
+			new_line;
+			return true;
+		],
+		messages [ n;
+			switch (n) {
+				0:
+					print "una ";
+PRT__(self, "camiseta");
+print "";
+					return true;
+				1:
+					print "Ya he comprado una de estas ", (name) self, ".";
+				2:
+					print "Ya he cogido una.";
+				3:
+					print "Cojo una ";
+PRT__(self, "camiseta");
+print ".";
+				4:
+					print "Dejo la ";
+PRT__(self, "camiseta");
+print " de nuevo en la estantería.";
+			}
+			new_line;
+			return true;
+		],
+ private
+		price 2500, ! 1495, 300 - 2490
+;
+
+Goods	-> PequennoComercioPantalones "pantalones"
+ has	male pluralname,
+ with	name_f 'prenda' 'ropa',
+		name_fp 'prendas',
+		name_m 'pantalon',
+		name_mp 'pantalones',
+		gender G_MASCULINO + G_PLURAL,
+				description [;
+			print "Casi todos son de un tono azulado más o menos intenso, aunque hay alguno marrón, negro y un par de ellos en colores. Me explican el tipo de corte de algunos: de pinzas, de campana, pitillos… Menos mal que me va enseñando cómo sería cada uno, porque no sería capaz de retener esta información. No logro conectarlo con ningún conocimiento previo, pero mi memoria visual no es mala. La etiqueta cuelga con un cordel de una de las hebillas y en ella se describe la composición (98% algodón orgánico, 2% elastano) y el precio, ";
+			Utils.print_money(self.price);
+			print ". En otra pequeña cartulina de tono marrón explican su procedencia (", (emph) "Xiro Atlantic Denim", ") y un logo que indica que el producto cumple con la certificación GOTS.";
+			new_line;
+			return true;
+		],
+		messages [ n;
+			switch (n) {
+				0:
+					print "", (a) self, "";
+					return true;
+				1:
+					print "Ya he comprado unos ";
+PRT__(self, "pantalones");
+print " iguales.";
+				2:
+					print "Ya he cogido unos.";
+				3:
+					print "Cojo unos ";
+PRT__(self, "pantalones");
+print ".";
+				4:
+					print "Dejo los ";
+PRT__(self, "pantalones");
+print " en su sitio.";
+			}
+			new_line;
+			return true;
+		],
+ private
+		price 10000, ! 2995, 8500 - 7990
+;
+
+Goods	-> PequennoComercioVestidos "vestidos"
+ has	male pluralname,
+ with	name_f 'prenda' 'ropa' 'vestido',
+		name_fp 'prendas' 'vestidos',
+		gender G_MASCULINO + G_PLURAL,
+				description [;
+			print "Los hay de diversos colores, con diversas tramas y patrones. No tienen etiquetas cosidas a los lados, pero sí un hoja un poco rara enlazada con un trozo de cuerda. Indican instrucciones de lavado, material (100% algodón sostenible), una breve historia sobre la gente de la fábrica gallega en la que se ha elaborado y un agradecimiento. En el margen inferior derecho hay un pequeño dibujo del contorno de unos árboles y las letras ", (emph) "~sheedo~", ".";
+			if (self hasnt described
+				|| PequennoComercioCamisetas hasnt described) {
+				new_line;
+				new_line;
+				print "—Es una empresa que elabora el papel con semillas. Lo puedes plantar, ¿ves? Esta hoja tiene semillas de zanahoria.
+				^^
+				Qué curioso, compras una ";
+PRT__(self, "camiseta");
+print " y puedes llevarte una zanahoria, o una calabaza, o unos tomates… Igual por eso el precio es algo elevado, ";
+				Utils.print_money(self.price);
+				print ".";
+			} else {
+				print " El precio es algo elevado: ";
+				Utils.print_money(self.price);
+				print ", aunque te llevas a casa también alguna verdura además del ";
+PRT__(self, "vestido");
+print ".";
+			}
+			new_line;
+			return true;
+		],
+		messages [ n;
+			switch (n) {
+				0:
+					print "un ";
+PRT__(self, "vestido");
+print "";
+					return true;
+				1:
+					print "Ya he comprado uno igual.";
+				2:
+					print "Ya he cogido uno.";
+				3:
+					print "Cojo un ";
+PRT__(self, "vestido");
+print ".";
+				4:
+					print "Dejo el ";
+PRT__(self, "vestido");
+print ".";
+			}
+			new_line;
+			return true;
+		],
+ private
+		price 5500, ! 3890, 1200 - 7890
+;
+
+
+
+AdjacentRoom	DirSegundaMano
+ has	male,
+ with	short_name [;
+			print "tienda de ";
+PRT__("segunda mano", "segunda mano", DIRECTION_OBJECT);
+print "";
+			return true;
+		],
+		found_in Calle,
+		name_f 'mano' 'segunda' 'tienda',
+		gender G_FEMENINO,
+				adjacent_room SegundaMano,
+		before [;
+			Enter:
+				if (self.adjacent_room hasnt visited) {
+					print "Hay un peldaño en la entrada que me molesta y el local es muy pequeño. Al parecer los locales grandes, más accesibles y bien ubicados implican más dinero, así que este espacio será más asequible. Si tengo suerte la ropa lo será también. ";
+					new_line;
+					new_line;
+				}
+				self.AdjacentRoom::before();
+				return true;
+		],
+		description [;
+			print "Se trata de una pequeña ", (name) self, ".";
+			new_line;
+			return true;
+		],
+;
+
+Shop	SegundaMano "Tienda de segunda mano"
+ has	male,
+ with	name_f 'tienda',
+		name_m 'comercio' 'local',
+		gender G_MASCULINO,
+		adjectives 'mano' 'segunda',
+				description [;
+			print "Hay varios carteles por las estanterías que especifican ~2ª mano, buen estado~ y en la pared, acompañados de ilustraciones en tonos verdes, algunos mensajes como ~No hay planeta B~ o ~Piensa en R~";
+			if (self hasnt visited) {
+				print " —investigaré qué quiere decir cuando vuelva a la estacion—";
+			}
+			print ". Tienen una pequeña estufa cerca de la salida a la ";
+PRT__(DirCiudad, "calle");
+print ", así que la temperatura varía y no invita a quedarse más de la cuenta.
+			^^
+			Aunque es una tienda pequeña, no está saturada y todo está bastante bien clasificado";
+			if (self hasnt visited) {
+				print ". Casi todo ordenado en función de los materiales con los que se ha hecho y el nivel de uso que ha tenido";
+			}
+			print ". A la derecha, en una estantería, están ", (the) SegundaManoCamisetas, ", ", (the) SegundaManoPantalones, " y ", (the) SegundaManoBotas, " en la parte interior, mientras que, a la izquierda, ", (the) SegundaManoVestidos, " cuelgan de unas barras horizontales. Un chico con una chapa en la que indica ~voluntario~ está en el mostrador al fondo de la tienda";
+			if (self hasnt visited) {
+				print ", donde un par de personas esperan para comprar y otra deja algunas camisetas que ya no va a utilizar";
+			}
+			print ".";
+			new_line;
+			return true;
+		],
+		out_to [;
+			<<Enter DirCiudad>>;
+		],
+;
+
+Goods	-> SegundaManoBotas "botas"
+ has	female pluralname,
+ with	name_f 'bota' 'prenda' 'ropa',
+		name_fp 'botas' 'prendas',
+		gender G_FEMENINO + G_PLURAL,
+		adjectives 'marrones' 'negra' 'negras',
+				description [;
+			print "Unas botas que a la gente les llegan a los tobillos parecen estar muy extendidas en su uso, tal vez por la época, aunque dicen que antes había cuatro etapas climáticas diferenciadas. Las hay de color negro o marrón, pero todas se atan con unos cordones y al parecer están hechas de un tejido similar al que recubre los cuerpos. La etiqueta dice que están hechos de piel. No especifica de dónde han sacado la piel, así que he preguntado y me han dicho que de vacuno, aunque he leído Bangladés. No comprendo muy bien qué proceso implica, pero me cuesta imaginarlo (y no sé si quiero). Hay varias instrucciones de cuidado y mantenimiento adecuado y, en la parte inferior, el precio, que es de ";
+			Utils.print_money(self.price);
+			print ".";
+			new_line;
+			return true;
+		],
+		messages [ n;
+			switch (n) {
+				0:
+					print "", (a) self, "";
+					return true;
+				1:
+					print "Ya he comprado unas ", (name) self, " iguales.";
+				2:
+					print "Ya he cogido unas.";
+				3:
+					print "Cojo unas ";
+PRT__(self, "botas");
+print ".";
+				4:
+					print "Dejo de nuevo las ";
+PRT__(self, "botas");
+print ".";
+			}
+			new_line;
+			return true;
+		],
+ private
+		price 7995, ! 5995, 1400 - 6895
+;
+
+Goods	-> SegundaManoCamisetas "camisetas"
+ has	female pluralname,
+ with	name_f 'camiseta' 'prenda' 'ropa',
+		name_fp 'camisetas' 'prendas',
+		gender G_FEMENINO + G_PLURAL,
+				description [;
+			print "En varios colores. Algunas tienen el cuello en pico y otras redondo, manga corta o larga, pero pocas diferencias significativas. Una de las etiquetas está cosida a un lado y otra es una cartulina marrón enganchada con un imperdible. La primera, en realidad, son unas siete etiquetas similares con la misma información en diferentes idiomas y señalan que están hechas de un 70% algodón y 30% poliéster. Además, aparecen algunos símbolos un tanto extraños. El primero es un triángulo que indica el tipo de planchado. A su lado, un cubo con una cifra que, al parecer, indica la temperatura a la que debe estar el agua con la que ha de ser lavado. En la otra etiqueta únicamente veo un logo a todo color que dice ", (emph) "~Better Cotton Initiative~", ". Cada camiseta, con toda esa literatura, marca un precio de ";
+			Utils.print_money(self.price);
+			print " y está fabricada en Camboya.";
+			new_line;
+			return true;
+		],
+		messages [ n;
+			switch (n) {
+				0:
+					print "una ";
+PRT__(self, "camiseta");
+print "";
+					return true;
+				1:
+					print "Ya he comprado una de estas ", (name) self, ".";
+				2:
+					print "Ya he cogido una.";
+				3:
+					print "Cojo una ";
+PRT__(self, "camiseta");
+print ".";
+				4:
+					print "Dejo la ";
+PRT__(self, "camiseta");
+print " de nuevo en la estantería.";
+			}
+			new_line;
+			return true;
+		],
+ private
+		price 1995, ! 1495, 300 - 2490
+;
+
+Goods	-> SegundaManoPantalones "pantalones"
+ has	male pluralname,
+ with	name_f 'prenda' 'ropa',
+		name_fp 'prendas',
+		name_m 'pantalon',
+		name_mp 'pantalones',
+		gender G_MASCULINO + G_PLURAL,
+				description [;
+			print "Me llaman la atención unos pantalones azulados. Al menos una tercera parte de la gente a la que me he cruzado hoy llevaban puestos unos pantalones iguales. Quizá la etiqueta diga si son parte de algún tipo de uniforme que no conozco. En las primeras líneas puede leerse: ", (emph) "~76% algodón, 23% poliéster y 1% licra~", " y ", (emph) "~Made in Vietnam~", ". Debajo aparecen instrucciones de lavado y planchado que no comprendo bien, transmiten el mensaje en un código lleno de triángulos, círculos tachados, puntos, rayas... En un trozo de cartulina a la altura de la cintura veo un logo a todo color que dice ", (emph) "~Better Cotton Initiative~", ". En otro papel aparece el precio: ";
+			Utils.print_money(self.price);
+			print ".";
+			new_line;
+			return true;
+		],
+		messages [ n;
+			switch (n) {
+				0:
+					print "", (a) self, "";
+					return true;
+				1:
+					print "Ya he comprado unos ";
+PRT__(self, "pantalones");
+print " iguales.";
+				2:
+					print "Ya he cogido unos.";
+				3:
+					print "Cojo unos ";
+PRT__(self, "pantalones");
+print ".";
+				4:
+					print "Dejo los ";
+PRT__(self, "pantalones");
+print " en su sitio.";
+			}
+			new_line;
+			return true;
+		],
+ private
+		price 2595, ! 2995, 8500 - 7990
+;
+
+Goods	-> SegundaManoVestidos "vestidos"
+ has	male pluralname,
+ with	name_f 'prenda' 'ropa' 'vestido',
+		name_fp 'prendas' 'vestidos',
+		gender G_MASCULINO + G_PLURAL,
+				description [;
+			print "Hay muchos modelos; más cortos, largos, con un corte más entallado o con vuelo, pero todos parecen igual de adecuados para mi objetivo. Será mejor consultar la etiqueta de uno de ellos para ver si hay algo destacable...
+			^^
+			Este puede ser una opción interesante, tienen varios colores, botones al frente, y un estampado que es discreto, pero moderno. Según la etiqueta, está hecho en Taiwán a base de poliéster (79%), acrílico (20%) y fibra metalizada (1%), hay que lavarlo a 30º y cuesta ";
+			Utils.print_money(self.price);
+			print ".";
+			new_line;
+			return true;
+		],
+		messages [ n;
+			switch (n) {
+				0:
+					print "un ";
+PRT__(self, "vestido");
+print "";
+					return true;
+				1:
+					print "Ya he comprado uno igual.";
+				2:
+					print "Ya he cogido uno.";
+				3:
+					print "Cojo un ";
+PRT__(self, "vestido");
+print ".";
+				4:
+					print "Dejo el ";
+PRT__(self, "vestido");
+print ".";
+			}
+			new_line;
+			return true;
+		],
+ private
+		price 4995, ! 3890, 1200 - 7890
+;

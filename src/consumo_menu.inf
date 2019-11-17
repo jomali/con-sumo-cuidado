@@ -1,0 +1,223 @@
+
+!!==============================================================================
+!!
+!!	CON SUMO CUIDADO
+!!	Menú de opciones
+!!
+!!==============================================================================
+!!
+!!	Archivo:		consumo_menu.inf
+!!	Autor(es):		J. Francisco Martín <jfm.lisaso@gmail.com>
+!!					Ana María Río
+!!	Idioma:			ES (Español)
+!!	Sistema:		Inform-INFSP 6
+!!	Plataforma:		Máquina-Z/Glulx
+!!	Versión:		0.0
+!!	Fecha:			2019/MM/DD
+!!
+!!------------------------------------------------------------------------------
+!!
+!!	Este archivo forma parte de la ficción interactiva
+!!	CON SUMO CUIDADO.
+!!
+!!	CON SUMO CUIDADO es software libre: usted puede
+!!	redistribuirlo y/o modificarlo bajo los términos de la
+!!	Licencia Pública General GNU publicada por la Fundación para
+!!	el Software Libre, ya sea la versión 3 de la Licencia, o (a
+!!	su elección) cualquier versión posterior.
+!!
+!!	CON SUMO CUIDADO se distribuye con la esperanza de que sea
+!!	útil, pero SIN GARANTÍA ALGUNA; ni siquiera la garantía
+!!	implícita MERCANTIL o de APTITUD PARA UN PROPÓSITO
+!!	DETERMINADO. Consulte los detalles de la Licencia Pública
+!!	General GNU para más información.
+!!
+!!	Debería haber recibido una copia de la Licencia Pública
+!!	General GNU junto a CON SUMO CUIDADO. En caso contrario,
+!!	consulte <http://www.gnu.org/licenses/>.
+!!
+!!	Copyright (c) 2019
+!!
+!!------------------------------------------------------------------------------
+
+
+!!------------------------------------------------------------------------------
+!! Menú principal de la aplicación.
+!!------------------------------------------------------------------------------
+Object	MainMenu "(Main Menu)"
+ with	!!----------------------------------------------------------------------
+		!! Genera el menú.
+		!!
+		!!	@param {boolean} [ini = false] - Verdadero cuando el menú se invoca
+		!!		al empezar la obra, antes de establecer la localidad inicial
+		!!	@returns {Object} Localidad de inicio de la historia
+		!!	@version 2019/06/17
+		!!----------------------------------------------------------------------
+		run [ ini;
+			#Ifdef VERSION_DESKTOP;
+			return self.menu_desktop(ini);
+			#Ifnot; ! VERSION_WEB_MOBILE;
+			return self.menu_web(ini);
+			#Endif; ! VERSION_
+		],
+ private
+		!!----------------------------------------------------------------------
+		!! Genera el menú en la versión de escritorio.
+		!!
+		!!	@param {boolean} [ini = false] - Verdadero cuando el menú se invoca
+		!!		al empezar la obra, antes de establecer la localidad inicial
+		!!	@returns {Object} Localidad de inicio de la historia
+		!!	@version 2019/06/18
+		!!----------------------------------------------------------------------
+		menu_desktop [ ini
+			done i j length line op previous_style result width;
+			while (~~done) {
+				width = ScreenWidth() - 2;
+				Utils.erase_window();
+				Utils.set_status_bar_contents(Story);
+				new_line;
+				print (strong) Story;
+				new_line;
+				new_line;
+				new_line;
+				previous_style = Utils.set_text_style(TEXT_STYLE_MONOSPACED);
+				for (i = 1 : i <= 4 : i++) {
+					switch (i) {
+						1:
+							line = "Empezar la historia ";
+							op = " [ESPACIO]";
+						2:
+							line = "Recuperar partida ";
+							op = " R";
+						3:
+							line = "Opciones ";
+							op = " X";
+						4:
+							line = "Salir de la aplicación ";
+							op = " Q";
+					}
+					if (i == 2) new_line;
+					print (string) line;
+					if (width > 33) {
+						PrintToBuffer(utility_array_a, INPUT_BUFFER_LEN, line);
+						PrintToBuffer(utility_array_b, INPUT_BUFFER_LEN, op);
+						ConcatenateArrays(utility_array_a, utility_array_b);
+						!! Se calcula el número de caracteres de las cadenas
+						!! 'line' y 'op' combinadas:
+						length = GetArrayLength(utility_array_a);
+						print " ";
+						for (j = 0 : j < (width-length)+1 : j++) {
+							print "·";
+						}
+						print " ";
+					} else {
+						print ": ";
+					}
+					print (string) op;
+					new_line;
+				}
+				new_line;
+				print "v";
+				PrintVersionNumber();
+				print "/";
+				PrintSerialNumber();
+				Utils.set_text_style(previous_style);
+
+				!! Reacción a la elección del usuario:
+				switch (Utils.press_any_key()) {
+					32, -6: ! INTRO / ESPACIO
+						done = true;
+						result = Estacion;
+						if (~~ini) PlayerTo(Estacion);
+					'Q', 'q':
+						Utils.erase_window();
+						new_line;
+						print (parser) "Pulsa una tecla para salir";
+						new_line;
+						quit;
+					'R', 'r':
+						Utils.erase_window();
+						Utils.set_status_bar_contents(0);
+						new_line;
+						print (parser) "Cargando partida…";
+						new_line;
+						<Restore>;
+						Utils.press_any_key();
+					'X', 'x': ! Opciones
+						Utils.erase_window();
+						Utils.set_status_bar_contents("Opciones");
+						new_line;
+						print (parser) "Opciones";
+						new_line;
+						Utils.press_any_key();
+					#Ifdef DEBUG;
+					'1':
+						done = true;
+						result = Estacion;
+						if (~~ini) PlayerTo(Estacion);
+					#Endif; ! DEBUG;
+				}
+			}
+			Utils.erase_window();
+			Utils.set_status_bar_contents(0);
+			return result;
+		],
+		!!----------------------------------------------------------------------
+		!! Genera el menú en la versión web.
+		!!
+		!!	@param {boolean} [ini = false] - Verdadero cuando el menú se invoca
+		!!		al empezar la obra, antes de establecer la localidad inicial
+		!!	@returns {Object} Localidad de inicio de la historia
+		!!	@version 2019/11/14
+		!!----------------------------------------------------------------------
+		menu_web [ ini
+			done result;
+			!! while (~~done) {
+				Utils.erase_window();
+				Utils.set_status_bar_contents(Story);
+				new_line;
+				Banner();
+				new_line;
+				new_line;
+				Utils.print_horizontal_rule();
+				new_line;
+				result = Estacion;
+				if (~~ini) PlayerTo(Estacion);
+			!! 	print (parser) "Pulsa «ESPACIO» para empezar.";
+			!! 	new_line;
+			!! 	switch (Utils.press_any_key()) {
+			!! 		32, -6: ! INTRO / ESPACIO
+			!! 			done = true;
+			!! 			result = Estacion;
+			!! 			if (~~ini) PlayerTo(Estacion);
+			!! 		#Ifdef DEBUG;
+			!! 		'1':
+			!! 			done = true;
+			!! 			result = Estacion;
+			!! 			if (~~ini) PlayerTo(Estacion);
+			!! 		#Endif; ! DEBUG;
+			!! 	}
+			!! }
+			!! Utils.erase_window();
+			!! Utils.set_status_bar_contents(0);
+			return result;
+		],
+		!!----------------------------------------------------------------------
+		!! Imprime la cadena pasada como parámetro centrada en pantalla y
+		!! seguida de un salto de línea.
+		!!
+		!!	@returns {boolean} Verdadero
+		!!	@version 2019/03/22
+		!!----------------------------------------------------------------------
+		print_centered [ txt
+			length previous_style;
+			PrintToBuffer(utility_array_a, INPUT_BUFFER_LEN, txt);
+			length = GetArrayLength(utility_array_a);
+			previous_style = Utils.set_text_style(TEXT_STYLE_MONOSPACED);
+			spaces (ScreenWidth() - 1 - length) / 2;
+			PrintCharacterArray(utility_array_a);
+			Utils.set_text_style(previous_style);
+			new_line;
+			return true;
+		],
+;
